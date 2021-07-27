@@ -1,0 +1,3 @@
+New "The End" graphic, bugfix for the menu system numbers not aligning properly in some instances, a bit more italic font kerning, and some other small goodies.
+
+Oh heck I think I left the MP=999 hack on to look at how the party screen looked ^-^;; Shit.

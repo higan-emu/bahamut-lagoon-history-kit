@@ -1,0 +1,3 @@
+Two last-minute cleanups: the ending graphic hook was being called every frame during all the opening/interstitial screens, so I enhanced the hook so that it's only called during the ending screen loading period a single time. I also greatly simplified the large block of code that was needed to move the field technique menu cursor one pixel to the left (eg when you go to cast a spell on the battlefield) ... goal here was to avoid any kind of unintentional slowdown caused by the old hooks.
+
+The former one should be fine, but the latter one is a tiiiiiny bit risky to make this change so late, but not very.

@@ -1,0 +1,5 @@
+All reported bugs fixed, plus more things fixed on my end. All code has now been cleaned up and finalized. From now on, only bugfixes will be added.
+
+----
+
+An important fix: I wasn't double-buffering the technique lists on the formations/dragons screens. You couldn't tell on the former because it was only five strings but on the dragons screen the rendering felt really awkward and choppy. Took me forever to figure that one out ^-^; But now it should render a lot cleaner like with every other screen.

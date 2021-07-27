@@ -1,0 +1,1 @@
+This patch implements a proper workaround for the S-CPU A bug, makes saving games update the save screen text faster, and fixes several typos reported since RC2.

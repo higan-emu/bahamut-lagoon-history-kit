@@ -1,0 +1,1 @@
+This patch fixes a small issue where the Bingo icon could get overwritten in combat when entering the technique menu. It's a small glitch, but the tiledata allocations are important so I'd like to get this patch out so it's well-tested before the final release.

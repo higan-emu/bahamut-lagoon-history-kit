@@ -1,0 +1,1 @@
+This patch fixes the party# display on the campaign formations screen, and corrects a couple more script issues.

@@ -1,0 +1,5 @@
+I've released version 1.1 of the translation to avoid a newly discovered SNES hardware bug, which was causing a bit of additional sprite flickering compared to the original game.
+
+The minor glitch only occurs infrequently on the fxpak when save RAM contains certain values at specific addresses on some SNES models, so it eluded us and went undiscovered for 40 days. I had hoped to only have a single 1.0 patch, but this couldn't be helped. Nothing is perfect.
+
+I couldn't leave everyone playing on the fxpak hanging while we investigate this new hardware glitch. If you're playing on an emulator or a real cartridge, you don't need to upgrade your patch, but it won't hurt to either. The save file is forward-compatible.

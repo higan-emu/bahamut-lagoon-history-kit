@@ -1,0 +1,1 @@
+This fixes the tile glitch on item list pages 15+16 in combat, and also removes an inaccurate note that was present in the original Japanese script (the Scharnhorst is *not* the strongest sword for a Cross Knight)

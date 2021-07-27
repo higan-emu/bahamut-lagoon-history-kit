@@ -1,0 +1,1 @@
+Fixed background color math effects in various parts of the game.

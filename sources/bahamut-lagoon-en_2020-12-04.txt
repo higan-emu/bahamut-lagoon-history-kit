@@ -1,0 +1,5 @@
+New smallcaps font for page#, fixed a few issues, nicer italic font.
+
+----
+
+Please wait for the next patch, there is a small issue in 2020-12-04 I want to fix first.

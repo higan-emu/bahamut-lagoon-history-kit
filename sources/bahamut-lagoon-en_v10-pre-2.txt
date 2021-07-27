@@ -1,0 +1,2 @@
+SHA256 (bahamut-lagoon-en.bps) = 079777e8505f9ebbf92d868bac182a49b87f83379cbba1e069c8f917bc70f026
+By all means, please test the hell out of this ^-^;

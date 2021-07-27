@@ -1,0 +1,3 @@
+This adds italic-umlaut support, and also rearranges the field LV/HP/MP displays to provide more spacing between each element.
+
+Note to self: update field-small.asm available/reserved tiles comments for next WIP.

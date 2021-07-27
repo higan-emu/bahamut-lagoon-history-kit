@@ -1,0 +1,3 @@
+This patch adds a new bold font for the opening and ending credits, repositions the opening credits text, and cleans up the chapter, field, and combat code. It fixes a bug when you try to feed the shortest item names to your dragon with >=10 items (quantity was truncated before), it shortens the minimum width of the dragon experience window after combat to 5 tiles to match the dragon HP/MP window size, and some other small things.
+
+All that's left for code cleanups is the menu code, render.asm, and text.asm. Which is probably half the total code though =/

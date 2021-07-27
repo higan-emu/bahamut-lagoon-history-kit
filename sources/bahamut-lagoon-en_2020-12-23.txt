@@ -1,0 +1,1 @@
+This is the final patch before the public beta. It adds the new "The End" graphic, and adds support for displaying a third time hour digit in case you wanna play for 100-255 hours.

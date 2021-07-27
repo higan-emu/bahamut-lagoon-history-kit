@@ -1,0 +1,1 @@
+This fixes all outstanding issues, and also cleans up item descriptions. I now consider the patch feature-complete and won't be making any more functional changes. Only code cleanups and script corrections going forward.

@@ -1,0 +1,2 @@
+SHA256 (bahamut-lagoon-en.bps) = 333488b0267c927c92b9efbbe90ea9761e438ed63a308d7af178bca6a3eefec1
+This is the final patch. Thank you so much, everyone.

@@ -1,0 +1,1 @@
+This beautifies the opening and ending credits. You can get to them quickly by skipping to event# F8 (ending) and FA (opening) if you like. Hold select on controller 1 while resetting with the debugger enabled to get the event selection window.

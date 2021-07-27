@@ -1,0 +1,9 @@
+This includes Tom's revised scripts and list translations.
+
+Tom is going to play through a third(!) time, and we're going to release publicly after that.
+
+----
+
+Lots of typo fixes, combat text overflow fix, s's -> s' code addition.
+
+This one retcons the previous 2020-12-19 patch posted earlier.

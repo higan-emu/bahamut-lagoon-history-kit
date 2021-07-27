@@ -1,0 +1,1 @@
+This release centers the title screen graphic better and fixes all script issues reported thus far.

@@ -1,0 +1,3 @@
+New patch. Has a new system for encoding the MP/SP cost values for spells, please let me know what you think. Also has a new italic font. I'm aware it overflows in Sendak's letter in chapter 1 for now.
+
+It could still prove unstable but I believe I've ironed out the issues with the previous patch.

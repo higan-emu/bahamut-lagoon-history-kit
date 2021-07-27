@@ -1,0 +1,13 @@
+This patch fixes two typos and the Black Dragon failure text message, adds coloration to "No Data" for the load/save screens, adds an italic font (so far you can only see it after you finish Scenario 1), improves the proportional font renderers to clip text rather than draw out of bounds, and as a test, colorizes list quantities / costs. I may not keep the test, but I'm curious to hear what you guys think. Does it help distinguish things, or does it make it too colorful?
+
+Also, it was indeed my fault for leaving a cheat on to enable ex-play. That will be fixed now, but unless you erase your SRM file it'll stay on. Sorry about that. If you really want to disable it I can walk you through it with a hex editor.
+
+----
+
+This patch has the same name (because it was made on the same day), but it makes a whole lot of big changes. Testing would be very much appreciated, but if you're playing the game legitimately you may want to wait as this may have issues possibly.
+
+I reduced the large font to 8x11 to get the 8x8 umlaut characters working and lining up with the 8x11 font. I added a new font color to the menu system that's more subtle than the green for item counts/spell costs/item costs/etc. I used the italics a lot more in Chapter 1, so you can really get a good feel for them now. And a few other things.
+
+----
+
+Patch test suspended for now, too many issues ^-^;

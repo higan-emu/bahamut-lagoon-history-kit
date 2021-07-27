@@ -1,0 +1,3 @@
+Please do not share the patches here with anyone else until the private beta testing phase is completed.
+
+You will need a copy of Bahamut Lagoon (Japan).sfc, plus beat or flips to apply the BPS patch to your ROM. Or optionally, use bsnes/higan/ares/Snes9X which supports BPS soft-patching by naming the patch the same basename as your ROM.

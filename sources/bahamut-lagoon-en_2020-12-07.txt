@@ -1,0 +1,1 @@
+Fancier Page #/# and Feed Quantity #/# handling, unified colors for fonts in all subsystems, italic kerning support, smaller minimum enemy name/hp/mp windows in combat, some typo fixes and revisions.

@@ -1,0 +1,4 @@
+This is the final release. Changes:
+
+* fxpak workaround removed and S-CPU A HDMA bug workaround corrected
+* script improvements by Tom

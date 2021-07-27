@@ -1,0 +1,1 @@
+This one uses the only mitigation we have that works on real hardware without causing any bugs, but won't work on the fxpak yet. I'm not in a rush to release this at any rate, so no hurry there.
