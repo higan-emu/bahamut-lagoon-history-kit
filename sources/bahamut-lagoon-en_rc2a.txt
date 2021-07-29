@@ -1,1 +1,0 @@
-I've (re)posted the RC2 patch for Bahamut Lagoon. This adds a workaround for a real hardware bug on the 2/1/2 SNES, fixes some typos, and (the reason for the repost), adds a missing technique name hook used in the boss battle in Chapter 13.
