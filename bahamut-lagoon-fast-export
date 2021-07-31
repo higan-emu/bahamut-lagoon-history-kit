@@ -1,0 +1,235 @@
+#!/usr/bin/env python3
+import datetime
+import io
+import os
+import os.path
+import pathlib
+import re
+import shutil
+import sys
+import tarfile
+import textwrap
+import typing
+import zipfile
+
+
+FULL_RELEASE_RE = re.compile(r"v[.0-9]+$")
+
+
+class SourceRecord(typing.NamedTuple):
+    version: str
+    source: pathlib.Path
+    kind: str
+
+
+def iter_source_records(
+    source_list: pathlib.Path,
+) -> typing.Iterable[SourceRecord]:
+    with source_list.open() as handle:
+        for line in handle:
+            (_, _, _, filename) = line.split()
+            source = source_list.parent.joinpath(filename)
+
+            filename_tail = filename.split("_", 1)[1]
+            version = filename_tail.split(".", 1)[0]
+
+            if version.startswith("v"):
+                # Convert "v12" into "v1.2"
+                # which is what Near used outside filenames.
+                version = version[0:2] + "." + version[2:]
+
+            yield SourceRecord(version, source, "".join(source.suffixes))
+
+
+class Release(typing.NamedTuple):
+    version: str
+    sources: typing.Dict[str, SourceRecord]
+
+    def changelog(self) -> str:
+        if ".txt" in self.sources:
+            raw_changelog = self.sources[".txt"].source.read_text()
+            paragraphs = (each for each in raw_changelog.split("\n") if each)
+            reflowed_text = "\n\n".join(
+                textwrap.fill(
+                    each, initial_indent="    ", subsequent_indent="    "
+                )
+                for each in paragraphs
+            )
+
+            return "Changelog from version {}:\n\n{}\n".format(
+                self.version,
+                reflowed_text,
+            )
+
+        return ""
+
+
+def iter_releases(
+    source_records: typing.Iterable[SourceRecord],
+) -> typing.Iterable[Release]:
+    source_records_iter = iter(source_records)
+
+    first_source = next(source_records_iter)
+    current_release = Release(
+        first_source.version,
+        {first_source.kind: first_source},
+    )
+
+    for record in source_records_iter:
+        if current_release.version != record.version:
+            yield current_release
+            current_release = Release(
+                record.version,
+                {},
+            )
+
+        current_release.sources[record.kind] = record
+
+    yield current_release
+
+
+class ArchiveFile(typing.NamedTuple):
+    path: str
+    size: int
+    handle: typing.IO[bytes]
+
+
+class Snapshot(typing.NamedTuple):
+    releases: typing.List[Release]
+    archive_path: pathlib.Path
+    timestamp: datetime.datetime
+
+    def version(self) -> str:
+        return self.releases[-1].version
+
+    def changelog(self) -> str:
+        return "Update to {} release.\n\n{}".format(
+            self.version(),
+            "\n".join(each.changelog() for each in self.releases),
+        )
+
+    def files(self) -> typing.Iterable[ArchiveFile]:
+        empty_dirs = set()
+
+        with tarfile.open(self.archive_path) as handle:
+            for info in iter(handle.next, None):
+                path = info.name
+                if not path:
+                    continue
+
+                # This path's's parent clearly isn't an empty directory.
+                empty_dirs.discard(os.path.dirname(path))
+
+                if info.isdir():
+                    # This directory may be empty.
+                    empty_dirs.add(path)
+
+                elif info.isfile():
+                    reader = handle.extractfile(info)
+                    assert reader is not None
+                    yield ArchiveFile(
+                        path=path,
+                        size=info.size,
+                        handle=reader,
+                    )
+
+                # Git doesn't care about non-files.
+
+        for dir in empty_dirs:
+            if dir[-4:] == "/obj" or dir[-4:] == "/out":
+                gitignore = b"*\n!.gitignore\n"
+            else:
+                gitignore = b""
+
+            yield ArchiveFile(
+                path=dir + "/.gitignore",
+                size=len(gitignore),
+                handle=io.BytesIO(gitignore),
+            )
+
+
+def iter_snapshots(
+    releases: typing.Iterable[Release],
+) -> typing.Iterable[Snapshot]:
+    release_collection = []
+
+    for each in releases:
+        release_collection.append(each)
+
+        if ".tar.xz" in each.sources:
+            archive_path = each.sources[".tar.xz"].source
+
+            with tarfile.open(archive_path) as handle:
+                timestamp_posix = max(
+                    (info.mtime for info in iter(handle.next, None)),
+                    default=0,
+                )
+
+            yield Snapshot(
+                release_collection,
+                archive_path,
+                datetime.datetime.fromtimestamp(timestamp_posix),
+            )
+
+            release_collection = []
+
+    for each in release_collection:
+        print("Release without a snapshot:", each.version, file=sys.stderr)
+
+
+def produce_history(
+    branch: bytes, snapshots: typing.Iterable[Snapshot], sink: typing.IO[bytes]
+) -> None:
+    sink.write(b"reset %s\n" % branch)
+
+    for mark, snapshot in enumerate(snapshots, 1):
+        sink.write(
+            b"progress Committing version %s\n"
+            % snapshot.version().encode("utf-8")
+        )
+        sink.write(b"commit %s\n" % branch)
+        sink.write(b"mark :%d\n" % mark)
+        sink.write(
+            b"committer %s %d +0000\n"
+            % (
+                b"Near <77224854+near-san@users.noreply.github.com>",
+                snapshot.timestamp.timestamp(),
+            )
+        )
+
+        changelog = snapshot.changelog().encode("utf-8")
+
+        sink.write(b"data %d\n" % len(changelog))
+        sink.write(changelog)
+        sink.write(b"\n")
+
+        # We're going to replace the previous snapshot with a new one.
+        sink.write(b"deleteall\n")
+
+        for each in snapshot.files():
+            sink.write(b"M 100644 inline %s\n" % each.path.encode("utf-8"))
+            sink.write(b"data %d\n" % each.size)
+            shutil.copyfileobj(each.handle, sink)
+            sink.write(b"\n")
+
+        m = FULL_RELEASE_RE.search(snapshot.version())
+        if m is not None:
+            sink.write(b"reset refs/tags/%s\n" % m.group().encode("utf-8"))
+            sink.write(b"from :%d\n" % mark)
+
+    sink.write(b"done\n")
+
+
+def main(args: typing.List[str]) -> int:
+    os.chdir(os.path.dirname(args[0]))
+
+    sources = iter_source_records(pathlib.Path("sources/timestamps.txt"))
+    releases = iter_releases(sources)
+    snapshots = iter_snapshots(releases)
+    produce_history(b"refs/heads/main", snapshots, sys.stdout.buffer)
+
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv))
