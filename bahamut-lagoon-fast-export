@@ -113,22 +113,18 @@ class Snapshot(typing.NamedTuple):
 
         with tarfile.open(self.archive_path) as handle:
             for info in iter(handle.next, None):
-                path = info.name
-                if not path:
-                    continue
-
                 # This path's's parent clearly isn't an empty directory.
-                empty_dirs.discard(os.path.dirname(path))
+                empty_dirs.discard(os.path.dirname(info.name))
 
                 if info.isdir():
                     # This directory may be empty.
-                    empty_dirs.add(path)
+                    empty_dirs.add(info.name)
 
                 elif info.isfile():
                     reader = handle.extractfile(info)
                     assert reader is not None
                     yield ArchiveFile(
-                        path=path,
+                        path=info.name,
                         size=info.size,
                         handle=reader,
                     )
