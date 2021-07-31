@@ -113,9 +113,6 @@ class Snapshot(typing.NamedTuple):
 
         with tarfile.open(self.archive_path) as handle:
             for info in iter(handle.next, None):
-                # This path's's parent clearly isn't an empty directory.
-                empty_dirs.discard(os.path.dirname(info.name))
-
                 if info.isdir():
                     # This directory may be empty.
                     empty_dirs.add(info.name)
@@ -132,7 +129,21 @@ class Snapshot(typing.NamedTuple):
                     # Generated files we shouldn't commit.
                     if info.name.startswith("bahamut/en/kerning/"):
                         continue
-                    if info.name == "bahamut/en/rom/bahamut-en-patch.bps":
+                    if info.name.startswith("bahamut/en/rom/"):
+                        continue
+                    if info.name.startswith("bahamut/jp/binaries/chapters/"):
+                        continue
+                    if info.name.startswith("bahamut/jp/binaries/fields/"):
+                        continue
+                    if info.name.startswith("bahamut/jp/binaries/menu/"):
+                        continue
+                    if info.name.startswith("bahamut/jp/binaries/other/"):
+                        continue
+                    if info.name.startswith("bahamut/jp/images/"):
+                        continue
+                    if info.name.startswith("bahamut/jp/fonts/"):
+                        continue
+                    if info.name.startswith("bahamut/jp/scripts/"):
                         continue
 
                     path = info.name
@@ -165,6 +176,13 @@ class Snapshot(typing.NamedTuple):
                             b"*.bs0\n"
                             b"en/binaries/*\n"
                             b"en/kerning/*\n"
+                            b"jp/binaries/chapters/*\n"
+                            b"jp/binaries/fields/*\n"
+                            b"jp/binaries/menu/*\n"
+                            b"jp/binaries/other/*\n"
+                            b"jp/images/*\n"
+                            b"jp/fonts/*\n"
+                            b"jp/scripts/*\n"
                         )
                         size = len(buffer)
                         reader = io.BytesIO(buffer)
@@ -174,6 +192,9 @@ class Snapshot(typing.NamedTuple):
                         size=size,
                         handle=reader,
                     )
+
+                # This path's's parent clearly isn't an empty directory.
+                empty_dirs.discard(os.path.dirname(info.name))
 
                 # Git doesn't care about non-files.
 
