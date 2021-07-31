@@ -121,11 +121,57 @@ class Snapshot(typing.NamedTuple):
                     empty_dirs.add(info.name)
 
                 elif info.isfile():
+                    # Near carefully excluded Tom's translation source files
+                    # from publicly-posted source snapshots,
+                    # but sometimes the pre-built binary files stayed around.
+                    # Let's be absolutely sure we don't include them
+                    # in the repo history.
+                    if info.name.startswith("bahamut/en/binaries/"):
+                        continue
+
+                    # Generated files we shouldn't commit.
+                    if info.name.startswith("bahamut/en/kerning/"):
+                        continue
+                    if info.name == "bahamut/en/rom/bahamut-en-patch.bps":
+                        continue
+
+                    path = info.name
+                    size = info.size
                     reader = handle.extractfile(info)
                     assert reader is not None
+
+                    # The exclusions file is not necessary as is,
+                    # and not useful as a .gitignore:
+                    # it ignores a bunch of files
+                    # that somebody working on a translation
+                    # would probably want to track,
+                    # and includes a bunch of generated files.
+                    # So, we'll make our own.
+                    if info.name == "bahamut/exclusions.txt":
+                        path = "bahamut/.gitignore"
+                        buffer = (
+                            b"*.bps\n"
+                            b"*.sfc\n"
+                            b"*.sav\n"
+                            b"*.bs1\n"
+                            b"*.bs2\n"
+                            b"*.bs3\n"
+                            b"*.bs4\n"
+                            b"*.bs5\n"
+                            b"*.bs6\n"
+                            b"*.bs7\n"
+                            b"*.bs8\n"
+                            b"*.bs9\n"
+                            b"*.bs0\n"
+                            b"en/binaries/*\n"
+                            b"en/kerning/*\n"
+                        )
+                        size = len(buffer)
+                        reader = io.BytesIO(buffer)
+
                     yield ArchiveFile(
-                        path=info.name,
-                        size=info.size,
+                        path=path,
+                        size=size,
                         handle=reader,
                     )
 
