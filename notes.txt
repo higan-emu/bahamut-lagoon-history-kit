@@ -1,0 +1,4 @@
+Make `exclusions.txt` into a `.gitignore` file
+
+Where is the English translation stored?
+How can we be sure it's stripped out of the archives?
