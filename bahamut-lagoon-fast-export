@@ -163,6 +163,7 @@ class Snapshot(typing.NamedTuple):
                         buffer = (
                             b"*.bps\n"
                             b"*.sfc\n"
+                            b"*.srm\n"
                             b"*.sav\n"
                             b"*.bs1\n"
                             b"*.bs2\n"
