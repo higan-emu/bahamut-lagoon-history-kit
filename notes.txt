@@ -5,10 +5,6 @@ make -C bass install
 make -C beat install
 make -C bahamut/tools
 cp /path/to/bahamut-jp.sfc bahamut/jp/rom/bahamut-jp.sfc
-./bahamut/tools/out/decompressor
-./bahamut/tools/out/font-extractor
-./bahamut/tools/out/list-extractor
-./bahamut/tools/out/script-extractor
 make -C bahamut/tools build
 make -C bahamut/tools patch
 ```
