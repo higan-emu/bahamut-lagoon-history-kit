@@ -125,6 +125,10 @@ class Snapshot(typing.NamedTuple):
                     # in the repo history.
                     if info.name.startswith("bahamut/en/binaries/"):
                         continue
+                    if info.name.startswith("bahamut/en/scripts/chapters/"):
+                        continue
+                    if info.name.startswith("bahamut/en/scripts/fields/"):
+                        continue
 
                     # Generated files we shouldn't commit.
                     if info.name.startswith("bahamut/en/kerning/"):
