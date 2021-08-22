@@ -27,7 +27,7 @@ def iter_source_records(
 ) -> typing.Iterable[SourceRecord]:
     with source_list.open() as handle:
         for line in handle:
-            (_, _, _, filename) = line.split()
+            filename = line.strip()
             source = source_list.parent.joinpath(filename)
 
             filename_tail = filename.split("_", 1)[1]
@@ -291,7 +291,7 @@ def produce_history(
 def main(args: typing.List[str]) -> int:
     os.chdir(os.path.dirname(args[0]))
 
-    sources = iter_source_records(pathlib.Path("sources/timestamps.txt"))
+    sources = iter_source_records(pathlib.Path("sources/timeline.txt"))
     releases = iter_releases(sources)
     snapshots = iter_snapshots(releases)
     produce_history(b"refs/heads/main", snapshots, sys.stdout.buffer)
