@@ -44,6 +44,7 @@ bahamut-lagoon-en_rc2c.bps
 bahamut-lagoon-en_rc2c.txt
 bahamut-lagoon-en_rc3.bps
 bahamut-lagoon-en_rc3.txt
+bahamut-lagoon-en_rc3.tar.xz
 bahamut-lagoon-en_rc4.bps
 bahamut-lagoon-en_rc4.txt
 bahamut-lagoon-en_rc5.bps
@@ -56,6 +57,7 @@ bahamut-lagoon-en_rc7.bps
 bahamut-lagoon-en_rc7.txt
 bahamut-lagoon-en_rc8.bps
 bahamut-lagoon-en_rc8.txt
+bahamut-lagoon-en_rc8.tar.xz
 bahamut-lagoon-en_rc9.bps
 bahamut-lagoon-en_rc9.txt
 bahamut-lagoon-en_v10-pre-1.bps
